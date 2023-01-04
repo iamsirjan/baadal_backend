@@ -87,7 +87,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'baseprice', 'finalprice', 'created_at',
+        fields = ['product_id', 'name', 'baseprice', 'finalprice', 'created_at', 'saletime',
                   'saledate', 'description', 'age', 'status', 'product_image', 'user', 'thumbnailimage']
 
     def create(self, validated_data):
@@ -105,3 +105,7 @@ class ProductSerializer(serializers.ModelSerializer):
             for image_data in product_image_data:
                 Product_image.objects.create(product=product, **image_data)
         return product
+
+    def get_products_by_user(self, user_id):
+        products = Product.objects.filter(user=user_id)
+        return products

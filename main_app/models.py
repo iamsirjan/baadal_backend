@@ -34,8 +34,9 @@ class Product(models.Model):
     name = models.TextField(max_length=255)
     baseprice = models.TextField(max_length=255)
     finalprice = models.TextField(max_length=255, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
     saledate = models.DateTimeField()
+    saletime = models.TimeField(default='12:00:00')
     description = models.TextField(blank=True)
     age = models.IntegerField()
     thumbnailimage = models.ImageField(
