@@ -7,10 +7,10 @@
       }
     ],
     "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "baadal_backend/my_app/\\$1"
-        }
+      {
+        "src": "/api/(.*)",
+        "dest": "https://baadal-backend-7rhuvab6n-sirjangnr-gmailcom.vercel.app/api/my_app/$1"
+      }
     ]
   }
   
