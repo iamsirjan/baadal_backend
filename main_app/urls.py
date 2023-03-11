@@ -1,7 +1,5 @@
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
-from .views import ProductFilterViewSet, RegisterView, RetrieveUserView, ProductViewSet, ProductDeleteView, CommingAuctionProductView
+from .views import GETKYCAPIViewBYId, KYCUpdateView, KycViewSet, ProductFilterViewSet, RegisterView, RetrieveUserView, ProductViewSet, ProductDeleteView,AssignProductView,BiddingViewSet,CommingAuctionProductView, VerifyKYCView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
@@ -16,11 +14,16 @@ urlpatterns = [
     path('product/<int:id>/', ProductDeleteView.as_view(), name='product_delete'),
     path('upcomming-auction/', CommingAuctionProductView.as_view(),
          name="upcomming auction"),
+    path('bidding/', BiddingViewSet.as_view(),
+         name="bidding"),
+
+     path('assign-product/<int:id>/', AssignProductView.as_view(),
+         name="bidding"),
+   
+    path('kyc/', KycViewSet.as_view(), name="KYC"),
+    path('kyc/<int:user_id>/verify/', VerifyKYCView.as_view(), name='verify_kyc'),
+    path('kyc/<int:id>', KYCUpdateView.as_view(), name='update kyc'),
+     path('kycbyuser/<int:user_id>', GETKYCAPIViewBYId.as_view(), name=' kyc by user id '),
 
 
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)

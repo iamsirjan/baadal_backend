@@ -1,11 +1,14 @@
+from urllib import request
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
-from .models import Product_image, Product
+from .models import KYC, Product_image, Product, Bidding
 # User Serializer
+import logging
 
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -87,8 +90,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'baseprice', 'finalprice', 'created_at', 'saletime',
-                  'saledate', 'description', 'age', 'status', 'product_image', 'user', 'thumbnailimage']
+        fields = ['product_id', 'name', 'baseprice', 'finalprice', 'created_at', 'saletime', 'auctionday',
+                  'saledate', 'saleend','description', 'age', 'status', 'product_image', 'user', 'thumbnailimage']
 
     def create(self, validated_data):
         # Get the currently authenticated user
@@ -106,6 +109,24 @@ class ProductSerializer(serializers.ModelSerializer):
                 Product_image.objects.create(product=product, **image_data)
         return product
 
+    def get_thumbnailimage_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.thumbnailimage.url) if obj.thumbnailimage else ''
+
     def get_products_by_user(self, user_id):
         products = Product.objects.filter(user=user_id)
+       
         return products
+
+class BiddingSerializer(serializers.ModelSerializer):
+    product = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = UserSerializer(read_only=True)
+    class Meta:
+        model = Bidding
+        fields = ['id','product','user','price','bidded_at']
+
+
+class KYCModelSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = KYC
+        fields = ['kyc_id','national_id','image_1','image_2','status','user']
