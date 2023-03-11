@@ -2,14 +2,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "/home/sirjan/majorproject/baadal_backend",
+        "src": "baadal_backend/",
         "use": "@vercel/python"
       }
     ],
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "https://baadal-backend.vercel.app/api/my_app/$1"
+        "dest": "baadal_backend/my_app/\\1"
       }
     ]
   }
