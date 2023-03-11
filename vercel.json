@@ -7,10 +7,10 @@
       }
     ],
     "routes": [
-      {
-        "src": "/my_app/(.*)",
-        "dest": "baadal_backend/my_app/\\$1"
-      }
+        {
+            "src": "/api/(.*)",
+            "dest": "baadal_backend/my_app/\\$1"
+        }
     ]
   }
   
