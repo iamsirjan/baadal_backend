@@ -2,17 +2,14 @@
     "version": 2,
     "builds": [
       {
-        "src": "/home/sirjan/major project/baadal_backend",
-        "use": "@vercel/python",
-        "config": {
-          "maxLambdaSize": "15mb"
-        }
+        "src": "/home/sirjan/majorproject/baadal_backend",
+        "use": "@vercel/python"
       }
     ],
     "routes": [
       {
-        "src": "/(.*)",
-        "dest": "/home/sirjan/major project/baadal_backend"
+        "src": "/my_app/(.*)",
+        "dest": "baadal_backend/my_app/\\$1"
       }
     ]
   }
