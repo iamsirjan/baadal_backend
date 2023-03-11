@@ -35,7 +35,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['baadal-backend.vercel.app']
 
-
+    
 # Application definition
 
 INSTALLED_APPS = [
