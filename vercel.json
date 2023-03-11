@@ -9,7 +9,7 @@
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "https://baadal-backend-7rhuvab6n-sirjangnr-gmailcom.vercel.app/api/my_app/$1"
+        "dest": "https://baadal-backend.vercel.app/api/my_app/$1"
       }
     ]
   }
