@@ -1,0 +1,10 @@
+main_app/yolov3.weights
+
+*.weights
+*.jpg
+*.png
+env
+*.cfg
+*.sqlite3
+*.sh
+.vscode

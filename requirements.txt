@@ -1,0 +1,8 @@
+Django==4.1.7
+djangorestframework==3.14.0
+djangorestframework_simplejwt==5.2.2
+numpy==1.23.5
+opencv_python==4.7.0.72
+pytesseract==0.3.10
+rest_framework_simplejwt==0.0.1
+ 
