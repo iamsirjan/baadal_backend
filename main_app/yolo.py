@@ -4,6 +4,7 @@ import os
 
 
 def compare_images(img1_path, img2_path):
+       
          # Load YOLOv3 pre-trained model
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         weights_path = os.path.join(BASE_DIR, "yolov3.weights")

@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 import os
 def match_images(img1_path, img2_path):
+        print(img1_path)
+        print(img2_path)
          # Load YOLOv3 pre-trained model
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         weights_path = os.path.join(BASE_DIR, "yolov3.weights")
@@ -142,7 +144,7 @@ def match_images(img1_path, img2_path):
             avg_score = 0
 
         # If the average difference score is below a certain threshold, consider the images a match
-        if avg_score <= 0:
+        if avg_score == 0:
             return True
         else:
             return False

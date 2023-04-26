@@ -21,7 +21,7 @@ product_status_choices = (
 
 class User(AbstractUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
-    firstname = models.TextField(max_length=255,blank=True)
+    firstname = models.TextField(max_length=250,blank=True)
     middlename = models.TextField(max_length=255, blank=True)
     lastname = models.TextField(max_length=255,blank=True)
     username = models.TextField(max_length=255, unique=True,)

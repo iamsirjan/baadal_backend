@@ -75,36 +75,47 @@ class ProductViewSet(generics.CreateAPIView, generics.ListAPIView):
 
 
     def create(self, request, *args, **kwargs):
+        
         # Get the currently authenticated user
         user = request.user
+      
+       
         # Create a mutable copy of the request data
         data = request.data.copy()
+       
         # Add the user to the request data
         data['user'] = user.pk
-        # Get the paths to the images from the request data
+        # # Get the paths to the images from the request data
         img1 = request.FILES.get('image1')
         img2 = request.FILES.get('image2')
 
-        # Save the images to the media directory
-        img1_path = default_storage.save('images/' + img1.name, img1  )
+        # # # Save the images to the media directory
+        img1_path = default_storage.save('images/' + img1.name, img1)
         img2_path = default_storage.save('images/' + img2.name, img2)
-        # # Get the full paths to the saved images
-        img1_full_path = settings.MEDIA_ROOT + '/' + img1_path
-        img2_full_path = settings.MEDIA_ROOT + '/' + img2_path
-        # # Compare the images using object detection
-        result = compare_images(img1_full_path, img2_full_path)
+
         
+        # # # # Get the full paths to the saved images
+        img1_full_path = settings.MEDIA_ROOT + '/' + img1_path
+        
+        img2_full_path = settings.MEDIA_ROOT + '/' + img2_path
+        # # # # Compare the images using object detection
+        result = compare_images(img1_full_path, img2_full_path)
+        print(result)
         for img in glob.glob('/home/sirjan/major project/baadal_backend/main_app/image/*'):
             matchimage = match_images(img1_full_path, img)
+            print(matchimage)
             if matchimage == True:
                 verification = False
+                break
             else:
                 verification = True
             
         # Create a new Product object with the modified data
         product_serializer = self.get_serializer(data=data)
         if product_serializer.is_valid():
+            print('ok')
             product = product_serializer.save()
+            print('ok1')
             product.verified = result
             product.police_verified = verification
             
@@ -156,9 +167,12 @@ class ProductDeleteView(generics.DestroyAPIView, generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         # Get the paths to the images from the request data
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
         img1 = request.FILES.get('image1')
         img2 = request.FILES.get('image2')
-
+       
         # Save the images to the media directory
         img1_path = default_storage.save('images/' + img1.name, img1  )
         img2_path = default_storage.save('images/' + img2.name, img2)
@@ -167,10 +181,24 @@ class ProductDeleteView(generics.DestroyAPIView, generics.UpdateAPIView):
         img2_full_path = settings.MEDIA_ROOT + '/' + img2_path
         # # Compare the images using object detection
         result = compare_images(img1_full_path, img2_full_path)
+        print(result)
         request.data['verified'] = result
+        for img in glob.glob('/home/sirjan/major project/baadal_backend/main_app/image/*'):
+            matchimage = match_images(img1_full_path, img)
+            print(matchimage)
+            if matchimage == True:
+
+                request.data['police_verified'] = False
+                
+                break
+            else:
+                request.data['police_verified'] = True
+                
         
         # Call the parent update method to perform the update
-        return super().update(request, *args, **kwargs)
+        self.perform_update(serializer)
+        
+        return Response({'message': 'Product edited successfully', 'product': serializer.data}, status=status.HTTP_201_CREATED)
 
 
 
@@ -250,6 +278,7 @@ class CommingAuctionProductView(generics.ListAPIView):
                 'time_left': time_left,
                 'status':product.status,
                 'verified':product.verified,
+                'police_verified':product.police_verified,
                 'auction_end_at':auction_end_at,
                 'created_at':product.created_at,
                 'thumbnailimage': request.build_absolute_uri(product.thumbnailimage.url) if product.thumbnailimage else None
@@ -369,8 +398,10 @@ class VerifyKYCView(APIView):
                 kyc = KYC.objects.get(user=user_id)
                
                 image_2_path = kyc.image_2.path
+                print(image_2_path)
 
                 img = cv2.imread(image_2_path)
+                print(img)
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 th, threshed = cv2.threshold(gray, 127, 255, cv2.THRESH_TRUNC)
 
@@ -380,6 +411,7 @@ class VerifyKYCView(APIView):
                 match = re.search(r'\d{2}-\d{2}-\d{2}-\d{5}', result)
                 if match:
                     cc_number = match.group(0) 
+                    print(cc_number)
                     if kyc.national_id == cc_number:
                         kyc.status = 'verified'
                         kyc.save()
